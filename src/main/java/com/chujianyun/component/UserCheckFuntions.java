@@ -3,6 +3,7 @@ package com.chujianyun.component;
 import com.chujianyun.entity.context.UserCheckContext;
 import com.chujianyun.entity.dto.UserCheckResultDTO;
 import com.chujianyun.entity.param.UserParam;
+import com.chujianyun.util.CheckUtil;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,7 @@ public class UserCheckFuntions {
 
     public Function<UserCheckContext, UserCheckContext> checkIsValid(UserParam userParam) {
 
-        return buildCheck(userCheckContext -> {
+        return CheckUtil.buildCheck(userCheckContext -> {
             UserCheckResultDTO userCheckResultDTO = userCheckContext.getUserCheckResultDTO();
             // 模拟调用服务A，检查有效性
             boolean result = (userParam.getUserId() > 50);
@@ -32,7 +33,7 @@ public class UserCheckFuntions {
     }
 
     public Function<UserCheckContext, UserCheckContext> checkIsInWhiteList(UserParam userParam) {
-        return buildCheck(userCheckContext -> {
+        return CheckUtil.buildCheck(userCheckContext -> {
             UserCheckResultDTO userCheckResultDTO = userCheckContext.getUserCheckResultDTO();
             // 模拟调用服务B，检查是否在白名单
             boolean result = (userParam.getUserId() > 500);
@@ -46,7 +47,7 @@ public class UserCheckFuntions {
     }
 
     public Function<UserCheckContext, UserCheckContext> checkIsHighLevel(UserParam userParam) {
-        return buildCheck(userCheckContext -> {
+        return CheckUtil.buildCheck(userCheckContext -> {
             UserCheckResultDTO userCheckResultDTO = userCheckContext.getUserCheckResultDTO();
             // 模拟调用服务C，检查是否高级用户
             boolean result = (userParam.getUserId() > 30);
@@ -57,13 +58,6 @@ public class UserCheckFuntions {
                 addFailedMessage(userCheckResultDTO, "等级不够");
             }
         });
-    }
-
-    public Function<UserCheckContext, UserCheckContext> buildCheck(Consumer<UserCheckContext> userCheckContextConsumer) {
-        return (userCheckContext) -> {
-            userCheckContextConsumer.accept(userCheckContext);
-            return userCheckContext;
-        };
     }
 
     /**
