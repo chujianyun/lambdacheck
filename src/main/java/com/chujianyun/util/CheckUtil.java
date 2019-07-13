@@ -1,7 +1,5 @@
 package com.chujianyun.util;
 
-import com.chujianyun.entity.context.UserCheckContext;
-
 import java.util.function.Consumer;
 import java.util.function.Function;
 
